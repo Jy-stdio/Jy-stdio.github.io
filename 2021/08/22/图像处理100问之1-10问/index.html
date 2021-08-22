@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.7.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="图像处理100问之1~10问。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像处理100问之1~10问">
+<meta property="og:url" content="http://example.com/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/index.html">
+<meta property="og:site_name" content="继垚のblog">
+<meta property="og:description" content="图像处理100问之1~10问。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/08/22/zqVSN7cKOMsXw5F.png">
+<meta property="og:image" content="http://example.com/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/output_3_0.png">
+<meta property="og:image" content="http://example.com/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/output_7_0.png">
+<meta property="og:image" content="http://example.com/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/output_11_0.png">
+<meta property="og:image" content="http://example.com/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/output_18_0.png">
+<meta property="og:image" content="http://example.com/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/output_21_0.png">
+<meta property="og:image" content="http://example.com/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/output_23_0.png">
+<meta property="og:image" content="http://example.com/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/output_26_0.png">
+<meta property="og:image" content="http://example.com/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/output_29_0.png">
+<meta property="article:published_time" content="2021-08-21T17:41:37.000Z">
+<meta property="article:modified_time" content="2021-08-22T08:48:42.718Z">
+<meta property="article:author" content="Jy">
+<meta property="article:tag" content="图像处理100问">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/08/22/zqVSN7cKOMsXw5F.png">
+
+
+<link rel="canonical" href="http://example.com/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/","path":"2021/08/22/图像处理100问之1-10问/","title":"图像处理100问之1~10问"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>图像处理100问之1~10问 | 继垚のblog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">继垚のblog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录生活中的点点滴滴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于我</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%97%AE-%E9%80%9A%E9%81%93%E6%9B%BF%E6%8D%A2"><span class="nav-number">1.</span> <span class="nav-text">第一问 通道替换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%BA%8C-%E7%81%B0%E5%BA%A6%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">问题二  灰度化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%B8%89-%E4%BA%8C%E5%80%BC%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">问题三 二值化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%9B%9B%EF%BC%9A%E5%A4%A7%E6%B4%A5%E4%BA%8C%E5%80%BC%E5%8C%96%E7%AE%97%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">问题四：大津二值化算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%BA%94%EF%BC%9A-text-HSV-%E5%8F%98%E6%8D%A2"><span class="nav-number">5.</span> <span class="nav-text">问题五：$\text{HSV}$变换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%85%AD-%E5%87%8F%E8%89%B2%E5%A4%84%E7%90%86"><span class="nav-number">6.</span> <span class="nav-text">问题六 减色处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%B8%83-%E5%B9%B3%E5%9D%87%E6%B1%A0%E5%8C%96"><span class="nav-number">7.</span> <span class="nav-text">问题七 平均池化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%85%AB%EF%BC%9A%E6%9C%80%E5%A4%A7%E6%B1%A0%E5%8C%96%EF%BC%88Max-Pooling%EF%BC%89"><span class="nav-number">8.</span> <span class="nav-text">问题八：最大池化（Max Pooling）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%B9%9D%EF%BC%9A%E9%AB%98%E6%96%AF%E6%BB%A4%E6%B3%A2%EF%BC%88Gaussian-Filter%EF%BC%89"><span class="nav-number">9.</span> <span class="nav-text">问题九：高斯滤波（Gaussian Filter）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%8D%81%EF%BC%9A%E4%B8%AD%E5%80%BC%E6%BB%A4%E6%B3%A2%EF%BC%88Median-Filter%EF%BC%89"><span class="nav-number">10.</span> <span class="nav-text">问题十：中值滤波（Median Filter）</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Jy"
+      src="https://i.loli.net/2021/08/21/8zO5nLZatI37ojw.jpg">
+  <p class="site-author-name" itemprop="name">Jy</p>
+  <div class="site-description" itemprop="description">欢迎来到Jyの炼丹小屋~</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="/jiyao316@foxmail.com" title="E-Mail → jiyao316@foxmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/zhi-shi-zhi-zhong-97-31" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhi-shi-zhi-zhong-97-31" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i>知乎</a>
+      </span>
+  </div>
+
+
+
+          </div>
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.loli.net/2021/08/21/8zO5nLZatI37ojw.jpg">
+      <meta itemprop="name" content="Jy">
+      <meta itemprop="description" content="欢迎来到Jyの炼丹小屋~">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="继垚のblog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          图像处理100问之1~10问
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-08-22 01:41:37 / 修改时间：16:48:42" itemprop="dateCreated datePublished" datetime="2021-08-22T01:41:37+08:00">2021-08-22</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>图像处理100问之1~10问。</p>
+<span id="more"></span>
+
+<p>首先导入需要的模块和代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#取消了warning的显示</span></span><br><span class="line"><span class="keyword">import</span> warnings  </span><br><span class="line">warnings.filterwarnings(<span class="string">&quot;ignore&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line"><span class="comment">#因为cv2.imshow无法在jupyter显示图片，故在执行程序前，先执行以下代码，再正常编写程序即可</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">aidemy_imshow</span>(<span class="params">name,img</span>):</span></span><br><span class="line">    b,g,r=cv2.split(img)</span><br><span class="line">    img=cv2.merge([r,g,b])</span><br><span class="line">    plt.imshow(img)</span><br><span class="line">    plt.show</span><br><span class="line">cv2.imshow=aidemy_imshow</span><br></pre></td></tr></table></figure>
+
+<h1 id="第一问-通道替换"><a href="#第一问-通道替换" class="headerlink" title="第一问 通道替换"></a>第一问 通道替换</h1><p>问题描述：读取图像，然后将$\text{RGB}$通道替换成$\text{BGR}$通道。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">img = cv2.imread(<span class="string">&quot;imori.jpg&quot;</span>)</span><br><span class="line">cv2.imshow(<span class="string">&quot;result&quot;</span>, img)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/08/22/zqVSN7cKOMsXw5F.png" alt="output_3_0"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">BGR2RGB</span>(<span class="params">img</span>):</span></span><br><span class="line">    b = img[:, :, <span class="number">0</span>].copy()</span><br><span class="line">    g = img[:, :, <span class="number">1</span>].copy()</span><br><span class="line">    r = img[:, :, <span class="number">2</span>].copy()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># RGB &gt; BGR</span></span><br><span class="line">    img[:, :, <span class="number">0</span>] = r</span><br><span class="line">    img[:, :, <span class="number">1</span>] = g</span><br><span class="line">    img[:, :, <span class="number">2</span>] = b</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> img</span><br><span class="line"></span><br><span class="line"><span class="comment"># BGR -&gt; RGB</span></span><br><span class="line">img = BGR2RGB(img)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Save result</span></span><br><span class="line">cv2.imshow(<span class="string">&quot;result&quot;</span>, img)</span><br></pre></td></tr></table></figure>
+
+<img src="/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/output_3_0.png" class="" title="image">
+
+
+<p>知识点：</p>
+<ul>
+<li>cv2.imread() 的系数是按$\text{BGR}$顺序排列的！</li>
+</ul>
+<h1 id="问题二-灰度化"><a href="#问题二-灰度化" class="headerlink" title="问题二  灰度化"></a>问题二  灰度化</h1><p>灰度是一种图像亮度的表示方法，通过下式计算： $$ Y = 0.2126\ R + 0.7152\ G + 0.0722\ B $$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#step1:读取图片</span></span><br><span class="line">img = cv2.imread(<span class="string">&quot;imori.jpg&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#step2：处理图片</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">BGR2GREY</span>(<span class="params">img</span>):</span>  <span class="comment">#灰度化</span></span><br><span class="line">    b=img[:,:,<span class="number">0</span>].copy()</span><br><span class="line">    g=img[:,:,<span class="number">1</span>].copy()</span><br><span class="line">    r=img[:,:,<span class="number">2</span>].copy()</span><br><span class="line">    </span><br><span class="line">    result=<span class="number">0.2126</span>*r+<span class="number">0.7152</span>*g+<span class="number">0.0722</span>*b</span><br><span class="line">    <span class="keyword">return</span> result.astype(np.uint8) <span class="comment">#将数组转化为8位无符号整型 </span></span><br><span class="line">out=BGR2GREY(img)</span><br><span class="line"></span><br><span class="line"><span class="comment">#step3:绘制图片</span></span><br><span class="line">plt.imshow(out)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<img src="/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/output_7_0.png" class="" title="image">
+
+
+<p>知识点：</p>
+<ul>
+<li>array.astype(np.uint8) 可以将数组转化为8位无符号整型 </li>
+</ul>
+<h1 id="问题三-二值化"><a href="#问题三-二值化" class="headerlink" title="问题三 二值化"></a>问题三 二值化</h1><p>我们将灰度图像的阈值设置为$128$来进行二值化，即：<br>$$ y= \begin{cases} 0&amp; (\text{if}\quad y &lt; 128) \ 255&amp; (\text{else}) \end{cases} $$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">binarization</span>(<span class="params">img,th=<span class="number">128</span></span>):</span></span><br><span class="line">    <span class="comment">#th为灰度阈值，img为灰度图</span></span><br><span class="line">    img[img&lt;<span class="number">128</span>]=<span class="number">0</span></span><br><span class="line">    img[img&gt;=<span class="number">128</span>]=<span class="number">255</span></span><br><span class="line">    <span class="keyword">return</span> img</span><br><span class="line">plt.imshow(binarization(out))</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<img src="/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/output_11_0.png" class="" title="image">
+
+
+
+<h1 id="问题四：大津二值化算法"><a href="#问题四：大津二值化算法" class="headerlink" title="问题四：大津二值化算法"></a>问题四：大津二值化算法</h1><p>使用大津算法来二值化图像吧。</p>
+<p>大津算法，也被称作最大类间方差法，是一种可以自动确定二值化中阈值的算法。</p>
+<p>从类内方差和类间方差的比值计算得来：</p>
+<p>小于阈值$t$的类记作$0$，大于阈值$t$的类记作$1$；<br>$w_0$和$w_1$是被阈值$t$分开的两个类中的像素数占总像素数的比率（满足$w_0+w_1=1$）；<br>${S_0}^2$， ${S_1}^2$是这两个类中像素值的方差；<br>$M_0$，$M_1$是这两个类的像素值的平均值；</p>
+<p>即：</p>
+<p>类内方差：${S_w}^2=w_0\ {S_0}^2+w_1\ {S_1}^2$<br>类间方差：${S_b}^2 = w_0 \ (M_0 - M_t)^2 + w_1\ (M_1 - M_t)^2 = w_0\ w_1\ (M_0 - M_1) ^2$<br>图像所有像素的方差：${S_t}^2 = {S_w}^2 + {S_b}^2 = \text{常数}$</p>
+<p>根据以上的式子，我们用以下的式子计算分离度$X$：</p>
+<p>$$ X = \frac{ {S_b}^2} { {S_w}^2} = \frac{ {S_b}^2} { {S_t}^2 - {S_b}^2} $$</p>
+<p>也就是说： $$ \arg\max\limits_{t}\ X=\arg\max\limits_{t}\ {S_b}^2 $$ 换言之，如果使${S_b}^2={w_0}\ {w_1}\ (M_0 - M_1)^2$最大，就可以得到最好的二值化阈值$t$。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">otsu_binarization</span>(<span class="params">img, th=<span class="number">128</span></span>):</span></span><br><span class="line">    max_sigma = <span class="number">0</span></span><br><span class="line">    max_t = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># determine threshold</span></span><br><span class="line">    <span class="keyword">for</span> _t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">255</span>):</span><br><span class="line">        v0 = out[np.where(out &lt; _t)]</span><br><span class="line">        m0 = np.mean(v0) <span class="keyword">if</span> <span class="built_in">len</span>(v0) &gt; <span class="number">0</span> <span class="keyword">else</span> <span class="number">0.</span></span><br><span class="line">        w0 = <span class="built_in">len</span>(v0) / (H * W)</span><br><span class="line">        v1 = out[np.where(out &gt;= _t)]</span><br><span class="line">        m1 = np.mean(v1) <span class="keyword">if</span> <span class="built_in">len</span>(v1) &gt; <span class="number">0</span> <span class="keyword">else</span> <span class="number">0.</span></span><br><span class="line">        w1 = <span class="built_in">len</span>(v1) / (H * W)</span><br><span class="line">        sigma = w0 * w1 * ((m0 - m1) ** <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">if</span> sigma &gt; max_sigma:</span><br><span class="line">            max_sigma = sigma</span><br><span class="line">            max_t = _t</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Binarization</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;threshold &gt;&gt;&quot;</span>, max_t)</span><br><span class="line">    th = max_t</span><br><span class="line">    out[out &lt; th] = <span class="number">0</span></span><br><span class="line">    out[out &gt;= th] = <span class="number">255</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> out</span><br><span class="line">img = cv2.imread(<span class="string">&quot;imori.jpg&quot;</span>).astype(np.float32)</span><br><span class="line">out=BGR2GREY(img)</span><br><span class="line">H, W, C =img.shape</span><br><span class="line">plt.imshow(otsu_binarization(out))</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<pre><code>threshold &gt;&gt; 127
+</code></pre>
+
+
+
+
+<h1 id="问题五：-text-HSV-变换"><a href="#问题五：-text-HSV-变换" class="headerlink" title="问题五：$\text{HSV}$变换"></a>问题五：$\text{HSV}$变换</h1><p>$\text{HSV}$即使用<strong>色相（Hue）、饱和度（Saturation）、明度（Value）</strong>来表示色彩的一种方式。</p>
+<ul>
+<li><p>色相：将颜色使用$0^{\circ}$到$360^{\circ}$表示，就是平常所说的颜色名称，如红色、蓝色。色相与数值按下表对应：</p>
+</li>
+<li><p>饱和度：是指色彩的纯度，饱和度越低则颜色越黯淡（$0\leq S &lt; 1$）；</p>
+</li>
+<li><p>明度：即颜色的明暗程度。数值越高越接近白色，数值越低越接近黑色（$0\leq V &lt; 1$）</p>
+</li>
+</ul>
+<p>从$\text{RGB}$色彩表示转换到$\text{HSV}$色彩表示通过以下方式计算：</p>
+<p>$\text{RGB}$的取值范围为$[0, 1]$，令：</p>
+<p> $$ \text{Max}=\max(R,G,B)\ \text{Min}=\min(R,G,B) $$ </p>
+<p>色相：</p>
+<p> $$ H=\begin{cases} 0&amp;(\text{if}\ \text{Min}=\text{Max})\\ 60\ \frac{G-R}{\text{Max}-\text{Min} }+60&amp;(\text{if}\ \text{Min}=B)\\ 60\ \frac{B-G}{\text{Max}-\text{Min} }+180&amp;(\text{if}\ \text{Min}=R)\\ 60\ \frac{R-B}{\text{Max}-\text{Min} }+300&amp;(\text{if}\ \text{Min}=G) \end{cases} $$ </p>
+<p>饱和度： $$ S=\text{Max}-\text{Min} $$ </p>
+<p>明度： $$ V=\text{Max} $$ </p>
+<p>从$\text{HSV}$色彩表示转换到$\text{RGB}$色彩表示通过以下方式计算：</p>
+<p> $$ C = S\ H’ = \frac{H} {60}\ X = C\ (1 - |H’ \mod 2 - 1|) $$</p>
+<p>$$(R,G,B)=(V-C)\ (1,1,1)+\begin{cases} (0, 0, 0)&amp; (\text{if H is undefined})\\ (C, X, 0)&amp; (\text{if}\quad 0 \leq H’ &lt; 1)\\ (X, C, 0)&amp; (\text{if}\quad 1 \leq H’ &lt; 2)\\  (0, C, X)&amp; (\text{if}\quad 2 \leq H’ &lt; 3)\\ (0, X, C)&amp; (\text{if}\quad 3 \leq H’ &lt; 4)\\ (X, 0, C)&amp; (\text{if}\quad 4 \leq H’ &lt; 5)\\ (C, 0, X)&amp; (\text{if}\quad 5 \leq H’ &lt; 6) \end{cases} $$ </p>
+<p>请将色相反转（色相值加$180$），然后再用$\text{RGB}$色彩空间表示图片。</p>
+<h1 id="问题六-减色处理"><a href="#问题六-减色处理" class="headerlink" title="问题六 减色处理"></a>问题六 减色处理</h1><p>我们将图像的值由$256^3$压缩至$4^3$，即将$\text{RGB}$的值只取${32, 96, 160, 224}$。这被称作色彩量化。色彩的值按照下面的方式定义： </p>
+<p>$$ \text{val}= \begin{cases} 32&amp; (0 \leq \text{var} &lt; 64)\\ 96&amp; (64\leq \text{var}&lt;128)\\160&amp;(128\leq \text{var}&lt;192)\\ 224&amp;(192\leq \text{var}&lt;256) \end{cases} $$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#step1:读取图片</span></span><br><span class="line">img = cv2.imread(<span class="string">&quot;imori.jpg&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#step2：处理图片</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decrease_color</span>(<span class="params">img</span>):</span></span><br><span class="line">    out=img.copy()</span><br><span class="line">    out=out//<span class="number">64</span>*<span class="number">64</span>+<span class="number">32</span>  <span class="comment">#核心——先地板除，再进行放大</span></span><br><span class="line">    <span class="keyword">return</span> out</span><br><span class="line"></span><br><span class="line">out=decrease_color(img)</span><br><span class="line"><span class="comment">#step3:绘制图片</span></span><br><span class="line">plt.imshow(out)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<img src="/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/output_18_0.png" class="" title="image">
+<h1 id="问题七-平均池化"><a href="#问题七-平均池化" class="headerlink" title="问题七 平均池化"></a>问题七 平均池化</h1><p>池化操作是<strong>卷积神经网络（Convolutional Neural Network）</strong>中重要的图像处理方式。平均池化按照下式定义： $$ v=\frac{1} {|R|}\ \sum\limits_{i=1}^R\ v_i $$ 请把大小为$128\times128$的imori.jpg使用$8\times8$的网格做平均池化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#step1:读取图片</span></span><br><span class="line">img = cv2.imread(<span class="string">&quot;imori.jpg&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#step2：处理图片</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average_pooling</span>(<span class="params">img,size=<span class="number">4</span></span>):</span></span><br><span class="line">    out=img.copy()</span><br><span class="line">    h,w,C=img.shape</span><br><span class="line">    H=h//size</span><br><span class="line">    W=w//size</span><br><span class="line">    <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(H):</span><br><span class="line">        <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(W):</span><br><span class="line">            <span class="keyword">for</span> c <span class="keyword">in</span> <span class="built_in">range</span>(C):  </span><br><span class="line">                out[y*size:(y+<span class="number">1</span>)*size,x*size:(x+<span class="number">1</span>)*size,c]=np.mean(out[y*size:(y+<span class="number">1</span>)*size,x*size:(x+<span class="number">1</span>)*size,c]).astype(np.uint8)</span><br><span class="line">    <span class="keyword">return</span> out    </span><br><span class="line">out=average_pooling(img)</span><br><span class="line"></span><br><span class="line"><span class="comment">#step3:绘制图片</span></span><br><span class="line">plt.imshow(out)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<img src="/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/output_21_0.png" class="" title="image">
+
+
+<h1 id="问题八：最大池化（Max-Pooling）"><a href="#问题八：最大池化（Max-Pooling）" class="headerlink" title="问题八：最大池化（Max Pooling）"></a>问题八：最大池化（Max Pooling）</h1><p>网格内的值不取平均值，而是取网格内的最大值进行池化操作。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#step1:读取图片</span></span><br><span class="line">img = cv2.imread(<span class="string">&quot;imori.jpg&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#step2：处理图片</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average_pooling</span>(<span class="params">img,size=<span class="number">4</span></span>):</span></span><br><span class="line">    out=img.copy()</span><br><span class="line">    h,w,C=img.shape</span><br><span class="line">    H=h//size</span><br><span class="line">    W=w//size</span><br><span class="line">    <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(H):</span><br><span class="line">        <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(W):</span><br><span class="line">            <span class="keyword">for</span> c <span class="keyword">in</span> <span class="built_in">range</span>(C):  </span><br><span class="line">                out[y*size:(y+<span class="number">1</span>)*size,x*size:(x+<span class="number">1</span>)*size,c]=np.<span class="built_in">max</span>(out[y*size:(y+<span class="number">1</span>)*size,x*size:(x+<span class="number">1</span>)*size,c]).astype(np.uint8)</span><br><span class="line">    <span class="keyword">return</span> out    </span><br><span class="line">out=average_pooling(img)</span><br><span class="line"></span><br><span class="line"><span class="comment">#step3:绘制图片</span></span><br><span class="line">plt.imshow(out)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<img src="/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/output_23_0.png" class="" title="image">
+
+
+<h1 id="问题九：高斯滤波（Gaussian-Filter）"><a href="#问题九：高斯滤波（Gaussian-Filter）" class="headerlink" title="问题九：高斯滤波（Gaussian Filter）"></a>问题九：高斯滤波（Gaussian Filter）</h1><p>使用高斯滤波器（$3\times3$大小，标准差$\sigma=1.3$）来对imori_noise.jpg进行降噪处理吧！</p>
+<p>高斯滤波器是一种可以使图像平滑的滤波器，用于去除噪声。可用于去除噪声的滤波器还有中值滤波器（参见问题十），平滑滤波器（参见问题十一）、LoG滤波器（参见问题十九）。</p>
+<p>高斯滤波器将中心像素周围的像素按照高斯分布加权平均进行平滑化。这样的（二维）权值通常被称为卷积核（kernel）或者滤波器（filter）。</p>
+<p>但是，由于图像的长宽可能不是滤波器大小的整数倍，因此我们需要在图像的边缘补$0$。这种方法称作<strong>Zero Padding</strong>。并且权值$g$（卷积核）要进行归一化操作（$\sum\ g = 1$）。</p>
+<p>按下面的高斯分布公式计算权值： $$ g(x,y,\sigma)=\frac{1} {2\ \pi\ \sigma^2}\ e^{-\frac{x^2+y^2} {2\ \sigma^2} } $$</p>
+<p>标准差$\sigma=1.3$的$8-$近邻高斯滤波器如下： $$ K=\frac{1} {16}\ \left[ \begin{matrix} 1 &amp; 2 &amp; 1 \\ 2 &amp; 4 &amp; 2 \\ 1 &amp; 2 &amp; 1 \end{matrix} \right] $$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#step1:读取图片</span></span><br><span class="line">img = cv2.imread(<span class="string">&quot;imori_noise.jpg&quot;</span>)</span><br><span class="line">plt.subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line">plt.imshow(img)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#step2：处理图片</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Gaussian_filter</span>(<span class="params">img,size=<span class="number">3</span>,sigma=<span class="number">1.3</span></span>):</span></span><br><span class="line">    <span class="comment">#--------维数扩展——----------</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(img.shape)==<span class="number">3</span>:</span><br><span class="line">        H,W,C=img.shape</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        img=np.expand_dims(img,axis=-<span class="number">1</span>) <span class="comment">#将维度从(H,W)扩充为(H,W,1)</span></span><br><span class="line">        H,W,C=img.shape     </span><br><span class="line">        </span><br><span class="line">    <span class="comment">#-------Zero padding-----------</span></span><br><span class="line">    pad = size // <span class="number">2</span></span><br><span class="line">    out = np.zeros((H + pad * <span class="number">2</span>, W + pad * <span class="number">2</span>, C), dtype=np.<span class="built_in">float</span>)</span><br><span class="line">    out[pad: pad + H, pad: pad + W] = img.copy().astype(np.<span class="built_in">float</span>)</span><br><span class="line">        </span><br><span class="line">    <span class="comment">#--------prepare Kernel--------</span></span><br><span class="line">    K = np.zeros((size, size), dtype=np.<span class="built_in">float</span>)</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(-pad, -pad + size):</span><br><span class="line">        <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(-pad, -pad + size):</span><br><span class="line">            K[y + pad, x + pad] = np.exp( -(x ** <span class="number">2</span> + y ** <span class="number">2</span>) / (<span class="number">2</span> * (sigma ** <span class="number">2</span>)))</span><br><span class="line">    K /= (<span class="number">2</span> * np.pi * sigma * sigma)</span><br><span class="line">    K /= K.<span class="built_in">sum</span>()</span><br><span class="line">    </span><br><span class="line">    tmp = out.copy()</span><br><span class="line">    <span class="comment"># --------filtering-----------</span></span><br><span class="line">    <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(H):</span><br><span class="line">        <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(W):</span><br><span class="line">            <span class="keyword">for</span> c <span class="keyword">in</span> <span class="built_in">range</span>(C):</span><br><span class="line">                out[pad + y, pad + x, c] = np.<span class="built_in">sum</span>(K * tmp[y: y + size, x: x + size, c])</span><br><span class="line"></span><br><span class="line">    out = np.clip(out, <span class="number">0</span>, <span class="number">255</span>)</span><br><span class="line">    out = out[pad: pad + H, pad: pad + W].astype(np.uint8)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> out</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">out=Gaussian_filter(img)</span><br><span class="line"></span><br><span class="line"><span class="comment">#step3:绘制图片</span></span><br><span class="line">plt.subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line">plt.imshow(img)</span><br><span class="line">plt.subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">plt.imshow(out)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<img src="/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/output_26_0.png" class="" title="image">
+<p>知识点：</p>
+<ul>
+<li><strong>np.expand_dims(img,axis=-1)</strong> #将维度从(H,W)扩充为(H,W,1)</li>
+<li><strong>np.clip</strong>是一个截取函数，用于截取数组中小于或者大于某值的部分，并使得被截取部分等于固定值。</li>
+</ul>
+<h1 id="问题十：中值滤波（Median-Filter）"><a href="#问题十：中值滤波（Median-Filter）" class="headerlink" title="问题十：中值滤波（Median Filter）"></a>问题十：中值滤波（Median Filter）</h1><p>使用中值滤波器（$3\times3$大小）来对imori_noise.jpg进行降噪处理吧！</p>
+<p>中值滤波器是一种可以使图像平滑的滤波器。这种滤波器用滤波器范围内（在这里是$3\times3$）像素点的中值进行滤波，请在这里也采用Zero Padding。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#step1:读取图片</span></span><br><span class="line">img = cv2.imread(<span class="string">&quot;imori_noise.jpg&quot;</span>)</span><br><span class="line">plt.subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line">plt.imshow(img)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#step2：处理图片</span></span><br><span class="line"><span class="comment"># Median filter</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">median_filter</span>(<span class="params">img, K_size=<span class="number">3</span></span>):</span></span><br><span class="line">    H, W, C = img.shape</span><br><span class="line"></span><br><span class="line">    <span class="comment">## Zero padding</span></span><br><span class="line">    pad = K_size // <span class="number">2</span></span><br><span class="line">    out = np.zeros((H + pad*<span class="number">2</span>, W + pad*<span class="number">2</span>, C), dtype=np.<span class="built_in">float</span>)</span><br><span class="line">    out[pad:pad+H, pad:pad+W] = img.copy().astype(np.<span class="built_in">float</span>)</span><br><span class="line"></span><br><span class="line">    tmp = out.copy()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># filtering</span></span><br><span class="line">    <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(H):</span><br><span class="line">        <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(W):</span><br><span class="line">            <span class="keyword">for</span> c <span class="keyword">in</span> <span class="built_in">range</span>(C):</span><br><span class="line">                out[pad+y, pad+x, c] = np.median(tmp[y:y+K_size, x:x+K_size, c])</span><br><span class="line"></span><br><span class="line">    out = out[pad:pad+H, pad:pad+W].astype(np.uint8)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> out</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">out=median_filter(img)</span><br><span class="line"></span><br><span class="line"><span class="comment">#step3:绘制图片</span></span><br><span class="line">plt.subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line">plt.imshow(img)</span><br><span class="line">plt.subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">plt.imshow(out)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<img src="/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/output_29_0.png" class="" title="image">
+<p>知识点：</p>
+<ul>
+<li>矩阵均值：np.median</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE/" rel="tag"># 图像处理100问</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/21/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/" rel="prev" title="博客搭建遇到的问题/bug">
+                  <i class="fa fa-chevron-left"></i> 博客搭建遇到的问题/bug
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

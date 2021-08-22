@@ -20,27 +20,31 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.7.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
-<meta name="description" content="【Hexo】本地local4000打不开解决方法问题：使用 hexo s 命令启动服务后，打开浏览器localhost:4000 地址发现没有反应，出错。页面显示不出来。 解决：http:&#x2F;&#x2F;localhost:4000&#x2F;&#x2F;**地址这样写就正常了。">
+<meta name="description" content="解决hexo博客中本地图片无法显示的问题step1：找到Hexo下的_config.yml里的post_asset_folder，把这个选项从false改成true。 这样在建立文件时，Hexo会自动建立一个与文章同名的文件夹，这样就可以把与该文章相关的所有资源（图片）都放到那个文件夹里方便后面引用。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="博客搭建遇到的问题">
+<meta property="og:title" content="博客搭建遇到的问题&#x2F;bug">
 <meta property="og:url" content="http://example.com/2021/08/21/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="继垚のblog">
-<meta property="og:description" content="【Hexo】本地local4000打不开解决方法问题：使用 hexo s 命令启动服务后，打开浏览器localhost:4000 地址发现没有反应，出错。页面显示不出来。 解决：http:&#x2F;&#x2F;localhost:4000&#x2F;&#x2F;**地址这样写就正常了。">
+<meta property="og:description" content="解决hexo博客中本地图片无法显示的问题step1：找到Hexo下的_config.yml里的post_asset_folder，把这个选项从false改成true。 这样在建立文件时，Hexo会自动建立一个与文章同名的文件夹，这样就可以把与该文章相关的所有资源（图片）都放到那个文件夹里方便后面引用。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-resource-1257868508.file.myqcloud.com/multiline_equation_wrong.png">
+<meta property="og:image" content="https://blog-resource-1257868508.file.myqcloud.com/multiline_equation_not_perfect.png">
 <meta property="article:published_time" content="2021-08-20T17:42:10.000Z">
-<meta property="article:modified_time" content="2021-08-21T04:32:43.420Z">
+<meta property="article:modified_time" content="2021-08-22T08:42:49.447Z">
 <meta property="article:author" content="Jy">
+<meta property="article:tag" content="博客搭建">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-resource-1257868508.file.myqcloud.com/multiline_equation_wrong.png">
 
 
 <link rel="canonical" href="http://example.com/2021/08/21/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/08/21/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/","path":"2021/08/21/博客搭建遇到的问题/","title":"博客搭建遇到的问题"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/08/21/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/","path":"2021/08/21/博客搭建遇到的问题/","title":"博客搭建遇到的问题/bug"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>博客搭建遇到的问题 | 继垚のblog</title>
+<title>博客搭建遇到的问题/bug | 继垚のblog</title>
   
 
 
@@ -118,7 +122,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E3%80%90Hexo%E3%80%91%E6%9C%AC%E5%9C%B0local4000%E6%89%93%E4%B8%8D%E5%BC%80%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">【Hexo】本地local4000打不开解决方法</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3hexo%E5%8D%9A%E5%AE%A2%E4%B8%AD%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">解决hexo博客中本地图片无法显示的问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E9%83%A8%E5%88%86%E5%85%AC%E5%BC%8F%E6%97%A0%E6%B3%95%E6%B8%B2%E6%9F%93%E4%B8%8A%E4%BC%A0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">解决部分公式无法渲染上传的问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AC%E5%BC%8F%E5%9D%97%E5%86%85%E6%8D%A2%E8%A1%8C%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">公式块内换行问题</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -137,6 +141,11 @@
           <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -196,7 +205,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          博客搭建遇到的问题
+          博客搭建遇到的问题/bug
         </h1>
 
         <div class="post-meta-container">
@@ -206,10 +215,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2021-08-21 01:42:10 / 修改时间：12:32:43" itemprop="dateCreated datePublished" datetime="2021-08-21T01:42:10+08:00">2021-08-21</time>
+      <time title="创建时间：2021-08-21 01:42:10" itemprop="dateCreated datePublished" datetime="2021-08-21T01:42:10+08:00">2021-08-21</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-08-22 16:42:49" itemprop="dateModified" datetime="2021-08-22T16:42:49+08:00">2021-08-22</time>
+      </span>
 
   
 </div>
@@ -221,9 +236,43 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="【Hexo】本地local4000打不开解决方法"><a href="#【Hexo】本地local4000打不开解决方法" class="headerlink" title="【Hexo】本地local4000打不开解决方法"></a>【Hexo】本地local4000打不开解决方法</h2><p><strong>问题：</strong>使用 <code>hexo s</code> 命令启动服务后，打开浏览器<code>localhost:4000</code> 地址发现没有反应，出错。页面显示不出来。</p>
-<p><strong>解决：</strong><a target="_blank" rel="noopener" href="http://localhost:4000//**%E5%9C%B0%E5%9D%80%E8%BF%99%E6%A0%B7%E5%86%99%E5%B0%B1%E6%AD%A3%E5%B8%B8%E4%BA%86%E3%80%82">http://localhost:4000//**地址这样写就正常了。</a></p>
+        <h1 id="解决hexo博客中本地图片无法显示的问题"><a href="#解决hexo博客中本地图片无法显示的问题" class="headerlink" title="解决hexo博客中本地图片无法显示的问题"></a>解决hexo博客中本地图片无法显示的问题</h1><p><strong>step1</strong>：找到<code>Hexo</code>下的<code>_config.yml</code>里的<code>post_asset_folder</code>，把这个选项从<code>false</code>改成<code>true</code>。</p>
+<p>这样在建立文件时，Hexo会自动建立一个与文章同名的文件夹，这样就可以把与该文章相关的所有资源（图片）都放到那个文件夹里方便后面引用。</p>
 <span id="more"></span>
+
+<p><strong>step2</strong>：在<code>Hexo</code>目录下打开Git Brsh，执行一个下载上传图片插件的命令:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install https://github.com/7ym0n/hexo-asset-image --save</span><br></pre></td></tr></table></figure>
+
+<p>（这是个修改过的插件，经测试无问题），使用这个插件来引入图片。</p>
+<p><strong>step3</strong>：插入图片时用这种方式：<code>&#123;% asset_img test.jpg This is an test image %&#125;</code></p>
+<p>其中test.jpg就是你要引用的图片，我这里就是test.jpg，后面的This is an test image是图片描述，可以自己修改。</p>
+<p><strong>step4：</strong>之后在git bash中  <code>hexo s</code>查看即可</p>
+<h1 id="解决部分公式无法渲染上传的问题"><a href="#解决部分公式无法渲染上传的问题" class="headerlink" title="解决部分公式无法渲染上传的问题"></a>解决部分公式无法渲染上传的问题</h1><p>在寻找解决方法的时候，看见一个 hexo 渲染时的小问题。</p>
+<p>在公式内如果连续使用两个即以上花括号，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ frac&#123;1&#125;&#123;&#123;(2pi)&#125;^frac&#123;D&#125;&#123;2&#125;&#125; $</span><br></pre></td></tr></table></figure>
+
+<p>则会渲染失败。</p>
+<p>解决方法就是在两个花括号中间加入<strong>空格</strong>，即可正常渲染</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ frac&#123;1&#125;&#123; &#123;(2pi)&#125;^frac&#123;D&#125;&#123;2&#125; &#125; $</span><br></pre></td></tr></table></figure>
+
+<p>补充文章：</p>
+<p>公式渲染问题可参考文章:</p>
+<h1 id="公式块内换行问题"><a href="#公式块内换行问题" class="headerlink" title="公式块内换行问题"></a>公式块内换行问题</h1><p>如果使用如下的 LaTeX 代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;align&#125;</span><br><span class="line">x &amp;= a +b+c+d\\</span><br><span class="line"> &amp;= e +f\\</span><br><span class="line"> &amp;= g</span><br><span class="line">\end&#123;align&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用 Hexo 渲染以后，得到的结果如下图所示，</p>
+<p><a target="_blank" rel="noopener" href="https://blog-resource-1257868508.file.myqcloud.com/multiline_equation_wrong.png"><img src="https://blog-resource-1257868508.file.myqcloud.com/multiline_equation_wrong.png" alt="img"></a></p>
+<p>可以看到，换行并未起作用，这是因为 Hexo 对 Markdown 文件的处理实际上分为两个步骤：</p>
+<ol>
+<li>Hexo 中的 Markdown 引擎把 Markdown 变为 html 文件</li>
+<li>MathJax 负责解释 html 的数学公式</li>
+</ol>
+<p>第一步中，由于 backslash 在 Markdown 属于特殊字符，用于字符转义，所以两个 backslash 经过 Markdown 引擎处理，只剩下一个，等到 MathJax 引擎处理时，实际上 MathJax 只看到一个 backslash，MathJax 把它当作 LaTeX 中的空格，因此我们见到了上图所示的渲染结果。</p>
+<p>知道了渲染错误的原因，解决办法也很简单，就是用四个 <code>\\\\</code> 代替两个 <code>\\</code>，确保 MathJax 的引擎看到的是两个 backslash，也就是把上述代码变成</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;align&#125;</span><br><span class="line">x &amp;= a +b+c+d\\\\</span><br><span class="line"> &amp;= e +f\\\\</span><br><span class="line"> &amp;= g</span><br><span class="line">\end&#123;align&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这时产生的公式如下图所示，</p>
+<p><a target="_blank" rel="noopener" href="https://blog-resource-1257868508.file.myqcloud.com/multiline_equation_not_perfect.png"><img src="https://blog-resource-1257868508.file.myqcloud.com/multiline_equation_not_perfect.png" alt="img"></a></p>
 
     </div>
 
@@ -232,16 +281,19 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" rel="tag"># 博客搭建</a>
+          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/08/21/hello-world/" rel="prev" title="Hello World">
-                  <i class="fa fa-chevron-left"></i> Hello World
-                </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2021/08/22/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86100%E9%97%AE%E4%B9%8B1-10%E9%97%AE/" rel="next" title="图像处理100问之1~10问">
+                  图像处理100问之1~10问 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -287,6 +339,12 @@
   
 
 
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
 
 
 
