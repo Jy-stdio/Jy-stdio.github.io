@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.7.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="1 轮廓：入门  什么是轮廓 实现寻找二进制图像的轮廓： 绘制轮廓 实现一个完整的轮廓查找代码：  2 轮廓特征  2.1 特征矩 2.2 轮廓面积 2.3 质心 2.4 轮廓周长  3 轮廓近似  3.1 多边形近似（Douglas-Peucker算法） 3.2 凸包近似 3.3 边界矩形近似 （1）直角矩形 （2）旋转矩形   3.4 最小闭合圆 3.5 拟合一个椭圆  4 轮廓属性  4.1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像处理的基本操作（三）：轮廓">
+<meta property="og:url" content="http://example.com/2021/09/05/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E8%BD%AE%E5%BB%93/index.html">
+<meta property="og:site_name" content="继垚のblog">
+<meta property="og:description" content="1 轮廓：入门  什么是轮廓 实现寻找二进制图像的轮廓： 绘制轮廓 实现一个完整的轮廓查找代码：  2 轮廓特征  2.1 特征矩 2.2 轮廓面积 2.3 质心 2.4 轮廓周长  3 轮廓近似  3.1 多边形近似（Douglas-Peucker算法） 3.2 凸包近似 3.3 边界矩形近似 （1）直角矩形 （2）旋转矩形   3.4 最小闭合圆 3.5 拟合一个椭圆  4 轮廓属性  4.1">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/795umL5.png">
+<meta property="og:image" content="https://i.imgur.com/SQicgqI.png">
+<meta property="og:image" content="https://i.imgur.com/JViuVVZ.jpg">
+<meta property="og:image" content="https://i.imgur.com/nuCBK4v.png">
+<meta property="og:image" content="https://i.imgur.com/CRJqaon.png">
+<meta property="og:image" content="https://i.imgur.com/zVHmUUw.png">
+<meta property="og:image" content="https://i.imgur.com/e1eJeeB.png">
+<meta property="og:image" content="https://i.imgur.com/DNBegIW.png">
+<meta property="og:image" content="https://i.imgur.com/3VsLp8q.png">
+<meta property="og:image" content="https://i.imgur.com/t3JmHsL.png">
+<meta property="og:image" content="https://i.imgur.com/2v95WsA.png">
+<meta property="og:image" content="https://i.imgur.com/Eraa4sT.png">
+<meta property="og:image" content="https://i.imgur.com/4n30D7d.png">
+<meta property="og:image" content="https://i.imgur.com/SZMAS13.png">
+<meta property="article:published_time" content="2021-09-05T15:04:34.000Z">
+<meta property="article:modified_time" content="2021-09-05T15:10:49.096Z">
+<meta property="article:author" content="Jy">
+<meta property="article:tag" content="图像处理小任务">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/795umL5.png">
+
+
+<link rel="canonical" href="http://example.com/2021/09/05/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E8%BD%AE%E5%BB%93/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/09/05/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E8%BD%AE%E5%BB%93/","path":"2021/09/05/图像处理的基本操作（三）：轮廓/","title":"图像处理的基本操作（三）：轮廓"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>图像处理的基本操作（三）：轮廓 | 继垚のblog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">继垚のblog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录生活中的点点滴滴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于我</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%BD%AE%E5%BB%93%EF%BC%9A%E5%85%A5%E9%97%A8"><span class="nav-number">1.</span> <span class="nav-text">1 轮廓：入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%BD%AE%E5%BB%93"><span class="nav-number">1.1.</span> <span class="nav-text">什么是轮廓</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%AF%BB%E6%89%BE%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%9B%BE%E5%83%8F%E7%9A%84%E8%BD%AE%E5%BB%93%EF%BC%9A"><span class="nav-number">1.2.</span> <span class="nav-text">实现寻找二进制图像的轮廓：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E8%BD%AE%E5%BB%93"><span class="nav-number">1.3.</span> <span class="nav-text">绘制轮廓</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E8%BD%AE%E5%BB%93%E6%9F%A5%E6%89%BE%E4%BB%A3%E7%A0%81%EF%BC%9A"><span class="nav-number">1.4.</span> <span class="nav-text">实现一个完整的轮廓查找代码：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E8%BD%AE%E5%BB%93%E7%89%B9%E5%BE%81"><span class="nav-number">2.</span> <span class="nav-text">2 轮廓特征</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E7%89%B9%E5%BE%81%E7%9F%A9"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 特征矩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E8%BD%AE%E5%BB%93%E9%9D%A2%E7%A7%AF"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 轮廓面积</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E8%B4%A8%E5%BF%83"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 质心</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-%E8%BD%AE%E5%BB%93%E5%91%A8%E9%95%BF"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 轮廓周长</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E8%BD%AE%E5%BB%93%E8%BF%91%E4%BC%BC"><span class="nav-number">3.</span> <span class="nav-text">3 轮廓近似</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E5%A4%9A%E8%BE%B9%E5%BD%A2%E8%BF%91%E4%BC%BC%EF%BC%88Douglas-Peucker%E7%AE%97%E6%B3%95%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 多边形近似（Douglas-Peucker算法）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E5%87%B8%E5%8C%85%E8%BF%91%E4%BC%BC"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 凸包近似</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E8%BE%B9%E7%95%8C%E7%9F%A9%E5%BD%A2%E8%BF%91%E4%BC%BC"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 边界矩形近似</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E7%9B%B4%E8%A7%92%E7%9F%A9%E5%BD%A2"><span class="nav-number">3.3.1.</span> <span class="nav-text">（1）直角矩形</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%882%EF%BC%89%E6%97%8B%E8%BD%AC%E7%9F%A9%E5%BD%A2"><span class="nav-number">3.3.2.</span> <span class="nav-text">（2）旋转矩形</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-%E6%9C%80%E5%B0%8F%E9%97%AD%E5%90%88%E5%9C%86"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 最小闭合圆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-%E6%8B%9F%E5%90%88%E4%B8%80%E4%B8%AA%E6%A4%AD%E5%9C%86"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 拟合一个椭圆</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E8%BD%AE%E5%BB%93%E5%B1%9E%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">4 轮廓属性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E9%95%BF%E5%AE%BD%E6%AF%94"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 长宽比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E8%8C%83%E5%9B%B4"><span class="nav-number">4.2.</span> <span class="nav-text">4.2. 范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E5%9D%9A%E5%AE%9E%E5%BA%A6"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 坚实度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E7%AD%89%E6%95%88%E7%9B%B4%E5%BE%84"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 等效直径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E5%8F%96%E5%90%91"><span class="nav-number">4.5.</span> <span class="nav-text">4.5 取向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-%E6%8E%A9%E7%A0%81%E5%92%8C%E5%83%8F%E7%B4%A0%E7%82%B9"><span class="nav-number">4.6.</span> <span class="nav-text">4.6 掩码和像素点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-%E6%9C%80%E5%A4%A7%E5%80%BC%EF%BC%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E5%92%8C%E5%AE%83%E4%BB%AC%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-number">4.7.</span> <span class="nav-text">4.7 最大值，最小值和它们的位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-%E5%B9%B3%E5%9D%87%E9%A2%9C%E8%89%B2%E6%88%96%E5%B9%B3%E5%9D%87%E5%BC%BA%E5%BA%A6"><span class="nav-number">4.8.</span> <span class="nav-text">4.8 平均颜色或平均强度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-9-%E6%9E%81%E7%AB%AF%E7%82%B9"><span class="nav-number">4.9.</span> <span class="nav-text">4.9 极端点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%85%B6%E4%BB%96%E5%B1%9E%E6%80%A7"><span class="nav-number">5.</span> <span class="nav-text">5 其他属性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E5%87%B8%E6%80%A7%E7%BC%BA%E9%99%B7"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 凸性缺陷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E7%82%B9%E5%A4%9A%E8%BE%B9%E5%BD%A2%E6%B5%8B%E8%AF%95"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 点多边形测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E5%BD%A2%E7%8A%B6%E5%8C%B9%E9%85%8D"><span class="nav-number">5.3.</span> <span class="nav-text">5.3 形状匹配</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Jy"
+      src="https://i.loli.net/2021/08/21/8zO5nLZatI37ojw.jpg">
+  <p class="site-author-name" itemprop="name">Jy</p>
+  <div class="site-description" itemprop="description">欢迎来到Jyの炼丹小屋~</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="/jiyao316@foxmail.com" title="E-Mail → jiyao316@foxmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/zhi-shi-zhi-zhong-97-31" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;zhi-shi-zhi-zhong-97-31" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i>知乎</a>
+      </span>
+  </div>
+
+
+
+          </div>
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/05/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9A%E8%BD%AE%E5%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.loli.net/2021/08/21/8zO5nLZatI37ojw.jpg">
+      <meta itemprop="name" content="Jy">
+      <meta itemprop="description" content="欢迎来到Jyの炼丹小屋~">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="继垚のblog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          图像处理的基本操作（三）：轮廓
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-09-05 23:04:34 / 修改时间：23:10:49" itemprop="dateCreated datePublished" datetime="2021-09-05T23:04:34+08:00">2021-09-05</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>1 轮廓：入门</p>
+<ul>
+<li>什么是轮廓</li>
+<li>实现寻找二进制图像的轮廓：</li>
+<li>绘制轮廓</li>
+<li>实现一个完整的轮廓查找代码：</li>
+</ul>
+<p>2 轮廓特征</p>
+<ul>
+<li>2.1 特征矩</li>
+<li>2.2 轮廓面积</li>
+<li>2.3 质心</li>
+<li>2.4 轮廓周长</li>
+</ul>
+<p>3 轮廓近似</p>
+<ul>
+<li>3.1 多边形近似（Douglas-Peucker算法）</li>
+<li>3.2 凸包近似</li>
+<li>3.3 边界矩形近似<ul>
+<li>（1）直角矩形</li>
+<li>（2）旋转矩形</li>
+</ul>
+</li>
+<li>3.4 最小闭合圆</li>
+<li>3.5 拟合一个椭圆</li>
+</ul>
+<p>4 轮廓属性</p>
+<ul>
+<li>4.1 长宽比</li>
+<li>4.2. 范围</li>
+<li>4.3 坚实度</li>
+<li>4.4 等效直径</li>
+<li>4.5 取向</li>
+<li>4.6 掩码和像素点</li>
+<li>4.7 最大值，最小值和它们的位置</li>
+<li>4.8 平均颜色或平均强度</li>
+<li>4.9 极端点</li>
+</ul>
+<p>5 其他属性</p>
+<ul>
+<li><p>5.1 凸性缺陷</p>
+</li>
+<li><p>5.2 点多边形测试</p>
+</li>
+<li><p>5.3 形状匹配</p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="1-轮廓：入门"><a href="#1-轮廓：入门" class="headerlink" title="1 轮廓：入门"></a>1 轮廓：入门</h1><h2 id="什么是轮廓"><a href="#什么是轮廓" class="headerlink" title="什么是轮廓"></a>什么是轮廓</h2><p><strong>定义</strong>：连接具有相同颜色或强度的所有连续点的曲线。</p>
+<ul>
+<li>为了准确性，轮廓检测使用二进制图像，因此需要首先进行<strong>canny边缘检测</strong>或者阈值操作。</li>
+<li>函数：查找轮廓<code>cv.findContours()</code>，绘制轮廓<code>cv.drawContours()</code></li>
+</ul>
+<h2 id="实现寻找二进制图像的轮廓："><a href="#实现寻找二进制图像的轮廓：" class="headerlink" title="实现寻找二进制图像的轮廓："></a>实现寻找二进制图像的轮廓：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line">im = cv.imread(<span class="string">&#x27;test.jpg&#x27;</span>)</span><br><span class="line">imgray = cv.cvtColor(im, cv.COLOR_BGR2GRAY)<span class="comment">#灰度化</span></span><br><span class="line">ret, thresh = cv.threshold(imgray, <span class="number">127</span>, <span class="number">255</span>, <span class="number">0</span>) <span class="comment">#阈值化</span></span><br><span class="line">contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)<span class="comment">#寻找轮廓</span></span><br></pre></td></tr></table></figure>
+
+<p><code>findcontour()</code>函数中有三个参数，第一个是源图像，第二个是轮廓检索模式，第三个是轮廓逼近方法。返回轮廓列表和层次结构。每个单独的轮廓是一个(x,y)坐标的Numpy数组的边界点的对象。</p>
+<p>注：<code>findcontour()</code>的第三个参数表示储存边界点的方法：如果传递<strong>cv.CHAIN_APPROX_NONE</strong>，则将存储所有边界点；传递<strong>cv.CHAIN_APPROX_SIMPLE</strong>则只储存所有线段两个端点。因此，使用SIMPLE方法可以大大节省内存。</p>
+<h2 id="绘制轮廓"><a href="#绘制轮廓" class="headerlink" title="绘制轮廓"></a>绘制轮廓</h2><p>函数：<code>cv.drawContours(源图像,轮廓列表,轮廓索引,颜色（RGB）,厚度)</code></p>
+<p>注意：第三个参数是轮廓的索引（在绘制单个轮廓时有用。要绘制所有轮廓，请传递-1）</p>
+<ul>
+<li>在图像中绘制所有轮廓</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cv.drawContours(im, contours, -<span class="number">1</span>, (<span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>), <span class="number">3</span>)</span><br><span class="line">cv.imshow(<span class="string">&quot;img&quot;</span>, im)</span><br><span class="line">cv.waitKey(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>注意：drawContours函数会“原地”修改输入的图像。</p>
+<ul>
+<li>绘制单个轮廓，如第四个轮廓：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cv.drawContours(img, contours, <span class="number">3</span>, (<span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>), <span class="number">3</span>) </span><br><span class="line">cv.imshow(<span class="string">&quot;img&quot;</span>, im)</span><br><span class="line">cv.waitKey(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>或者：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cnt = contours[<span class="number">4</span>]</span><br><span class="line">cv.drawContours(img, [cnt], <span class="number">0</span>, (<span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>), <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<p>阈值后查找得到轮廓如下，可以看到有一些物体并没有分割出来。因此使用下文canny边缘检测之后再进行轮廓查找效果好：<br><img src="https://i.imgur.com/795umL5.png"></p>
+<h2 id="实现一个完整的轮廓查找代码："><a href="#实现一个完整的轮廓查找代码：" class="headerlink" title="实现一个完整的轮廓查找代码："></a>实现一个完整的轮廓查找代码：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment">#读取绘制原图</span></span><br><span class="line">im = cv.imread(<span class="string">&#x27;land.png&#x27;</span>)</span><br><span class="line">plt.subplot(<span class="number">121</span>),plt.imshow(im,cmap = <span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Original Image&#x27;</span>), plt.xticks([]), plt.yticks([])</span><br><span class="line"><span class="comment">#轮廓检测</span></span><br><span class="line">edge = cv.Canny(im,<span class="number">100</span>,<span class="number">200</span>) <span class="comment">#canny边缘检测</span></span><br><span class="line">contours, hierarchy = cv.findContours(edge, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE) <span class="comment">#寻找轮廓</span></span><br><span class="line"><span class="comment">#绘制轮廓</span></span><br><span class="line">cv.drawContours(im, contours, -<span class="number">1</span>, (<span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>), <span class="number">3</span>) </span><br><span class="line">plt.subplot(<span class="number">122</span>),plt.imshow(im,cmap = <span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Edge Image&#x27;</span>), plt.xticks([]), plt.yticks([])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://i.imgur.com/SQicgqI.png"></p>
+<h1 id="2-轮廓特征"><a href="#2-轮廓特征" class="headerlink" title="2 轮廓特征"></a>2 轮廓特征</h1><p>目标：如何找到轮廓的不同特征，例如面积，周长，质心，边界框等。</p>
+<h2 id="2-1-特征矩"><a href="#2-1-特征矩" class="headerlink" title="2.1 特征矩"></a>2.1 特征矩</h2><p>轮廓的特征矩可以帮助计算一些特征，例如物体的质心，物体的面积等。请查看特征矩上的维基百科页面。函数<strong>cv.moments</strong>()提供了所有计算出的矩值的字典。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">img = cv.imread(<span class="string">&#x27;land.png&#x27;</span>,<span class="number">0</span>)</span><br><span class="line">ret,thresh = cv.threshold(img,<span class="number">127</span>,<span class="number">255</span>,<span class="number">0</span>)</span><br><span class="line">contours,hierarchy = cv.findContours(thresh, <span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">cnt = contours[<span class="number">0</span>]</span><br><span class="line">M = cv.moments(cnt)</span><br><span class="line"><span class="built_in">print</span>( M )</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>out: {‘m00’: 5061.0, ‘m10’: 1551983.6666666665, ‘m01’: 1196424.1666666665, ‘m20’: 477463512.1666666, ‘m11’: 366151168.25, ‘m02’: 286894060.6666666, ‘m30’: 147357248229.9, ‘m21’: 112418174645.31667, ‘m12’: 87635219845.05, ‘m03’: 69730921930.95, ‘mu20’: 1539129.3174054623, ‘mu11’: -738925.619184792, ‘mu02’: 4058497.2238633037, ‘mu30’: -3545967.881072998, ‘mu21’: -1363721.4154610634, ‘mu12’: 6933087.093323708, ‘mu03’: -9911061.08555603, ‘nu20’: 0.060090032112298804, ‘nu11’: -0.028848819708186563, ‘nu02’: 0.1584501222553062, ‘nu30’: -0.0019460050108929424, ‘nu21’: -0.0007484017895690052, ‘nu12’: 0.0038048348651377344, ‘nu03’: -0.005439128379787215}</p>
+</blockquote>
+<p>之后便可以用特征矩提取有用的数据，例如质心和面积。</p>
+<h2 id="2-2-轮廓面积"><a href="#2-2-轮廓面积" class="headerlink" title="2.2 轮廓面积"></a>2.2 轮廓面积</h2><p>轮廓区域由函数<strong>cv.contourArea</strong>()或从矩M[‘m00’]中给出。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">area = cv.contourArea(cnt) </span><br></pre></td></tr></table></figure>
+
+<p>or</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">area = M[<span class="string">&#x27;m00&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-3-质心"><a href="#2-3-质心" class="headerlink" title="2.3 质心"></a>2.3 质心</h2><p>质心公式$C_x = \frac{M_{10}}{M_{00}}$，$C_y = \frac{M_{01}}{M_{00}}$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cx = <span class="built_in">int</span>(M[<span class="string">&#x27;m10&#x27;</span>]/M[<span class="string">&#x27;m00&#x27;</span>])cy = <span class="built_in">int</span>(M[<span class="string">&#x27;m01&#x27;</span>]/M[<span class="string">&#x27;m00&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-4-轮廓周长"><a href="#2-4-轮廓周长" class="headerlink" title="2.4 轮廓周长"></a>2.4 轮廓周长</h2><p>用<strong>cv.arcLength</strong>()函数找到它。第二个参数指定形状是闭合轮廓(True)还是曲线。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">perimeter = cv.arcLength(cnt,<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<h1 id="3-轮廓近似"><a href="#3-轮廓近似" class="headerlink" title="3 轮廓近似"></a>3 轮廓近似</h1><h2 id="3-1-多边形近似（Douglas-Peucker算法）"><a href="#3-1-多边形近似（Douglas-Peucker算法）" class="headerlink" title="3.1 多边形近似（Douglas-Peucker算法）"></a>3.1 多边形近似（Douglas-Peucker算法）</h2><p>根据指定的精度，它可以将轮廓形状近似为顶点数量较少的其他形状。它是Douglas-Peucker算法的实现。</p>
+<p>Douglas-Peucker算法：</p>
+<ol>
+<li>连接曲线首尾两点A、B形成一条直线AB；<br>计算曲线上离该直线段距离最大的点C，计算其与AB的距离d；</li>
+<li>比较该距离与预先给定的阈值threshold的大小，如果小于threshold，则以该直线作为曲线的近似，该段曲线处理完毕。</li>
+<li>如果距离大于阈值，则用点C将曲线分为两段AC和BC，并分别对两段曲线进行步骤[1~3]的处理。</li>
+<li>当所有曲线都处理完毕后，依次连接各个分割点形成折线，作为原曲线的近似。</li>
+</ol>
+<p><img src="https://i.imgur.com/JViuVVZ.jpg"></p>
+<p>下面是一段代码实现：函数第二个参数称为epsilon，它是从轮廓到近似轮廓的最大距离。它是一个精度参数。需要正确选择epsilon才能获得正确的输出。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> npimport cv2 <span class="keyword">as</span> cvimport matplotlib.pyplot <span class="keyword">as</span> pltimg = cv.imread(<span class="string">&#x27;6.png&#x27;</span>)img1=img.copy()img2=img.copy()edge = cv.Canny(img,<span class="number">100</span>,<span class="number">200</span>) <span class="comment">#canny边缘检测contours,hierarchy = cv.findContours(edge, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE) #寻找轮廓cnt = contours[0]#绘制检测边缘cv.drawContours(img, [cnt], 0, (255,0,0), 3)plt.subplot(131),plt.imshow(img,cmap = &#x27;gray&#x27;)plt.title(&#x27;drawContours&#x27;), plt.xticks([]), plt.yticks([])#轮廓近似1epsilon = 0.1*cv.arcLength(cnt,True)approx = cv.approxPolyDP(cnt,epsilon,True)cv.drawContours(img1, [approx], 0, (255,0,0), 3)plt.subplot(132),plt.imshow(img1,cmap = &#x27;gray&#x27;)plt.title(&#x27;epsilon=10%&#x27;), plt.xticks([]), plt.yticks([])#轮廓近似2epsilon = 0.01*cv.arcLength(cnt,True)approx = cv.approxPolyDP(cnt,epsilon,True)cv.drawContours(img2, [approx], 0, (255,0,0), 3)plt.subplot(133),plt.imshow(img2,cmap = &#x27;gray&#x27;)plt.title(&#x27;epsilon=1%&#x27;), plt.xticks([]), plt.yticks([])plt.show()</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/nuCBK4v.png"></p>
+<h2 id="3-2-凸包近似"><a href="#3-2-凸包近似" class="headerlink" title="3.2 凸包近似"></a>3.2 凸包近似</h2><p>定义：凸包如下图，红线显示手的凸包。双向箭头标记显示凸度缺陷，这是凸包与轮廓线之间的局部最大偏差。<br>函数：使用函数<code>cv2.convexHull()， </code>函数实现，返回凸包的轮廓角点。<br><img src="https://i.imgur.com/CRJqaon.png"></p>
+<p><strong>获取图像的凸包</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> npimport cv2 <span class="keyword">as</span> cvimport matplotlib.pyplot <span class="keyword">as</span> pltimg = cv.imread(<span class="string">&#x27;10.png&#x27;</span>)img1=img.copy()img2=img.copy()edge = cv.Canny(img,<span class="number">100</span>,<span class="number">200</span>) <span class="comment">#canny边缘检测contours,hierarchy = cv.findContours(edge, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE) #寻找轮廓cnt = contours[0]cv.drawContours(img, [cnt], 0, (255,0,0), 3)plt.subplot(121),plt.imshow(img,cmap = &#x27;gray&#x27;)plt.title(&#x27;edge&#x27;), plt.xticks([]), plt.yticks([])hull=cv.convexHull(cnt)cv.drawContours(img1, [hull], 0, (255,0,0), 3)plt.subplot(122),plt.imshow(img1,cmap = &#x27;gray&#x27;)plt.title(&#x27;tubao&#x27;), plt.xticks([]), plt.yticks([])plt.show()</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/zVHmUUw.png"></p>
+<p><strong>检查凸度</strong>：<code>cv.isContourConvex()</code></p>
+<p>检查是否凸出，返回True还是False</p>
+<p>k = cv.isContourConvex(cnt) </p>
+<h2 id="3-3-边界矩形近似"><a href="#3-3-边界矩形近似" class="headerlink" title="3.3 边界矩形近似"></a>3.3 边界矩形近似</h2><p>有两种类型的边界矩形：</p>
+<h3 id="（1）直角矩形"><a href="#（1）直角矩形" class="headerlink" title="（1）直角矩形"></a>（1）直角矩形</h3><p><code>cv.boundingRect()</code>寻找直角矩形边界。</p>
+<p>不考虑物体旋转的边界矩形</p>
+<p>令(x，y)为矩形的左上角坐标，而(w，h)为矩形的宽度和高度。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> npimport cv2 <span class="keyword">as</span> cvimport matplotlib.pyplot <span class="keyword">as</span> pltimg = cv.imread(<span class="string">&#x27;10.png&#x27;</span>)img1=img.copy()<span class="comment">#canny边缘检测edge = cv.Canny(img,100,200) #寻找轮廓contours,hierarchy = cv.findContours(edge, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE) #轮廓一cnt = contours[0]#====边界矩形近似（核心代码）=========================x,y,w,h = cv.boundingRect(cnt)cv.rectangle(img1,(x,y),(x+w,y+h),(0,255,0),2)#=====================================plt.imshow(img1,cmap = &#x27;gray&#x27;)plt.show()</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/e1eJeeB.png"></p>
+<h3 id="（2）旋转矩形"><a href="#（2）旋转矩形" class="headerlink" title="（2）旋转矩形"></a>（2）旋转矩形</h3><p>边界矩形是用最小面积绘制的，所以它也考虑了旋转。使用的函数是<strong>cv.minAreaRect</strong>()。它返回一个Box2D结构，其中包含以下细节 -(中心(x,y)，(宽度，高度)，旋转角度)。但要画出这个矩形，我们需要矩形的四个角。它由函数<strong>cv.boxPoints</strong>()获得。</p>
+<p>只需要对上面代码改动核心代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#====边界矩形近似（核心代码）=========================rect = cv.minAreaRect(cnt)box = cv.boxPoints(rect)box = np.int0(box)cv.drawContours(img1,[box],0,(0,0,255),2)#=====================================</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/DNBegIW.png"></p>
+<h2 id="3-4-最小闭合圆"><a href="#3-4-最小闭合圆" class="headerlink" title="3.4 最小闭合圆"></a>3.4 最小闭合圆</h2><p>只需要对上面代码改动核心代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#====外接圆近似（核心代码）=========================(x,y),radius = cv.minEnclosingCircle(cnt)center = (int(x),int(y))radius = int(radius)cv.circle(img1,center,radius,(0,255,0),2)#=====================================</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/3VsLp8q.png"></p>
+<h2 id="3-5-拟合一个椭圆"><a href="#3-5-拟合一个椭圆" class="headerlink" title="3.5 拟合一个椭圆"></a>3.5 拟合一个椭圆</h2><p>下一个是把一个椭圆拟合到一个物体上。它返回内接椭圆的旋转矩形。</p>
+<p>只需要对上面代码改动核心代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#====椭圆近似（核心代码）=========================ellipse = cv.fitEllipse(cnt)cv.ellipse(img1,ellipse,(0,255,0),2)#=====================================</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/t3JmHsL.png"></p>
+<h1 id="4-轮廓属性"><a href="#4-轮廓属性" class="headerlink" title="4 轮廓属性"></a>4 轮廓属性</h1><p>学习提取一些常用的物体属性，如坚实度，等效直径，掩模图像，平均强度等。</p>
+<h2 id="4-1-长宽比"><a href="#4-1-长宽比" class="headerlink" title="4.1 长宽比"></a>4.1 长宽比</h2><p>边界矩形的宽度和高度的比值：<br>$$Aspect ; Ratio = \frac{Width}{Height}$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> npimport cv2 <span class="keyword">as</span> cvimport matplotlib.pyplot <span class="keyword">as</span> pltimg = cv.imread(<span class="string">&#x27;10.png&#x27;</span>)img1=img.copy()<span class="comment">#canny边缘检测edge = cv.Canny(img,100,200)#寻找轮廓contours,hierarchy = cv.findContours(edge, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)#轮廓一cnt = contours[0]#====（核心代码）=========================x,y,w,h = cv.boundingRect(cnt)aspect_ratio = float(w)/h#=====================================print(aspect_ratio)</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>[out] 0.7518248175182481</p>
+</blockquote>
+<h2 id="4-2-范围"><a href="#4-2-范围" class="headerlink" title="4.2. 范围"></a>4.2. 范围</h2><p>范围是轮廓区域面积与边界矩形区域面积的比值。<br>$$Extent = \frac{Object ; Area}{Bounding ; Rectangle ; Area}<br>$$</p>
+<p>只需对上面代码的核心代码进行修改：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#====（核心代码）=========================area=cv.contourArea(cnt)#获取轮廓面积hull=cv.convexHull(cnt)#获取边界矩形hull_area=cv.contourArea(hull)#边界矩形面积solidity=float(area)/hull_area#计算范围#=====================================</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-3-坚实度"><a href="#4-3-坚实度" class="headerlink" title="4.3 坚实度"></a>4.3 坚实度</h2><p>坚实度是轮廓区域面积与其凸包面积之比。<br>只需对上面代码的核心代码进行修改：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#====（核心代码）=========================area = cv.contourArea(cnt)#获取轮廓面积hull = cv.convexHull(cnt)#获取凸包hull_area = cv.contourArea(hull)#获取凸包面积solidity = float(area)/hull_area#=====================================</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-4-等效直径"><a href="#4-4-等效直径" class="headerlink" title="4.4 等效直径"></a>4.4 等效直径</h2><p>等效直径是面积与轮廓面积相同的圆的直径</p>
+<p>$$Equivalent ; Diameter = \sqrt{\frac{4 \times Contour ; Area}{\pi}}$$</p>
+<p>只需对上面代码的核心代码进行修改：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">area = cv.contourArea(cnt)equi_diameter = np.sqrt(<span class="number">4</span>*area/np.pi)</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-5-取向"><a href="#4-5-取向" class="headerlink" title="4.5 取向"></a>4.5 取向</h2><p>取向是物体指向的角度。以下方法还给出了主轴和副轴的长度。</p>
+<p>只需对上面代码的核心代码进行修改：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(x,y),(MA,ma),angle = cv.fitEllipse(cnt)</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-6-掩码和像素点"><a href="#4-6-掩码和像素点" class="headerlink" title="4.6 掩码和像素点"></a>4.6 掩码和像素点</h2><p>以下核心代码可以获取构成该对象的所有点</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#====（核心代码）=========================mask = np.zeros(img.shape,np.uint8)  #新建黑色背景图cv.drawContours(mask,[cnt],0,255,-1) #获取填充maskpixelpoints = np.transpose(np.nonzero(mask)) #获取构成对象的所有点坐标#pixelpoints = cv.findNonZero(mask)#同上#=====================================</span></span><br></pre></td></tr></table></figure>
+
+<p>生成的mask如下图：<br><img src="https://i.imgur.com/2v95WsA.png"></p>
+<p>代码后两行提供了两个方法获取对象所有点：</p>
+<h2 id="4-7-最大值，最小值和它们的位置"><a href="#4-7-最大值，最小值和它们的位置" class="headerlink" title="4.7 最大值，最小值和它们的位置"></a>4.7 最大值，最小值和它们的位置</h2><p>假设有一个矩阵a,现在需要求这个矩阵的最小值，最大值，并得到最大值，最小值的索引。我们可以使用上面的掩码图像规定区域找到这些参数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">min_val, max_val, min_loc, max_loc = cv.minMaxLoc(imgray,mask = mask)</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-8-平均颜色或平均强度"><a href="#4-8-平均颜色或平均强度" class="headerlink" title="4.8 平均颜色或平均强度"></a>4.8 平均颜色或平均强度</h2><p>在这里，我们可以找到对象的平均颜色。或者可以是灰度模式下物体的平均强度。我们再次使用相同的掩码进行此操作。</p>
+<p>mean_val = cv.mean(im,mask = mask)</p>
+<h2 id="4-9-极端点"><a href="#4-9-极端点" class="headerlink" title="4.9 极端点"></a>4.9 极端点</h2><p>极点是指对象的最顶部，最底部，最右侧和最左侧的点。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">leftmost = <span class="built_in">tuple</span>(cnt[cnt[:,:,<span class="number">0</span>].argmin()][<span class="number">0</span>])rightmost = <span class="built_in">tuple</span>(cnt[cnt[:,:,<span class="number">0</span>].argmax()][<span class="number">0</span>])topmost = <span class="built_in">tuple</span>(cnt[cnt[:,:,<span class="number">1</span>].argmin()][<span class="number">0</span>])bottommost = <span class="built_in">tuple</span>(cnt[cnt[:,:,<span class="number">1</span>].argmax()][<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+
+<p>下面是一个完整的查找极端点并绘制代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> npimport cv2 <span class="keyword">as</span> cvimport matplotlib.pyplot <span class="keyword">as</span> pltimg = cv.imread(<span class="string">&#x27;10.png&#x27;</span>)img1=img.copy()<span class="comment">#canny边缘检测edge = cv.Canny(img,100,200)#寻找轮廓contours,hierarchy = cv.findContours(edge, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)#轮廓一cnt = contours[0]#获取极端点#====（核心代码）=========================leftmost = tuple(cnt[cnt[:,:,0].argmin()][0])rightmost = tuple(cnt[cnt[:,:,0].argmax()][0])topmost = tuple(cnt[cnt[:,:,1].argmin()][0])bottommost = tuple(cnt[cnt[:,:,1].argmax()][0])#=====================================nodes=[leftmost,rightmost,topmost,bottommost]#绘制极端点point_size = 1point_color = (0, 0, 255) # BGRthickness = 4 # 可以为 0 、4、8for point in nodes:	cv.circle(img1, point, point_size, point_color, thickness)plt.imshow(img1)plt.show()</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/Eraa4sT.png"></p>
+<h1 id="5-其他属性"><a href="#5-其他属性" class="headerlink" title="5 其他属性"></a>5 其他属性</h1><h2 id="5-1-凸性缺陷"><a href="#5-1-凸性缺陷" class="headerlink" title="5.1 凸性缺陷"></a>5.1 凸性缺陷</h2><p>在本文的前面提到了凸包，在凸包上的任何偏差都可以被认为是凸性缺陷，使用函数<code>cv.convexityDefects()</code>可以凸性缺陷。</p>
+<p>它返回一个数组，其中每行包含这些值—**[起点、终点、最远点、到最远点的近似距离]**。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> npimport cv2 <span class="keyword">as</span> cvimport matplotlib.pyplot <span class="keyword">as</span> pltimg = cv.imread(<span class="string">&#x27;10.png&#x27;</span>)img1=img.copy()<span class="comment">#canny边缘检测edge = cv.Canny(img,100,200)#寻找轮廓contours,hierarchy = cv.findContours(edge, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)#轮廓一cnt = contours[0]#获取凸性缺陷#====（核心代码）=========================hull = cv.convexHull(cnt,returnPoints = False)defects = cv.convexityDefects(cnt,hull)#=====================================#绘制缺陷for i in range(defects.shape[0]):    s,e,f,d = defects[i,0]    start = tuple(cnt[s][0])    end = tuple(cnt[e][0])    far = tuple(cnt[f][0])    cv.line(img1,start,end,[0,255,0],2)    cv.circle(img1,far,1,[0,0,255],-1)plt.imshow(img1)plt.show()</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/4n30D7d.png"></p>
+<h2 id="5-2-点多边形测试"><a href="#5-2-点多边形测试" class="headerlink" title="5.2 点多边形测试"></a>5.2 点多边形测试</h2><p>函数<code>cv.pointPolygonTest</code>找出图像中一点到轮廓线的最短距离。点在轮廓线外时为负，点在轮廓线内时为正，点在轮廓线上时为零。</p>
+<p>代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dist = cv.pointPolygonTest(cnt,(<span class="number">50</span>,<span class="number">50</span>),<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>函数第三个参数如果真，它会找到有符号的距离。如果为假，则查找该点是在轮廓线内部还是外部(分别返回+1、-1和0)。</p>
+<h2 id="5-3-形状匹配"><a href="#5-3-形状匹配" class="headerlink" title="5.3 形状匹配"></a>5.3 形状匹配</h2><p>OpenCV附带一个函数<strong>cv.matchShapes</strong>()，该函数使我们能够比较两个形状或两个轮廓，并返回一个显示相似性的度量。结果越低，匹配越好。</p>
+<p>对下面三个图进行形状匹配：</p>
+<p><img src="https://i.imgur.com/SZMAS13.png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cvimport numpy <span class="keyword">as</span> npimg1 = cv.imread(<span class="string">&#x27;star.jpg&#x27;</span>,<span class="number">0</span>)img2 = cv.imread(<span class="string">&#x27;star2.jpg&#x27;</span>,<span class="number">0</span>)ret, thresh = cv.threshold(img1, <span class="number">127</span>, <span class="number">255</span>,<span class="number">0</span>)ret, thresh2 = cv.threshold(img2, <span class="number">127</span>, <span class="number">255</span>,<span class="number">0</span>)contours,hierarchy = cv.findContours(thresh,<span class="number">2</span>,<span class="number">1</span>)cnt1 = contours[<span class="number">0</span>]contours,hierarchy = cv.findContours(thresh2,<span class="number">2</span>,<span class="number">1</span>)cnt2 = contours[<span class="number">0</span>]ret = cv.matchShapes(cnt1,cnt2,<span class="number">1</span>,<span class="number">0.0</span>)<span class="built_in">print</span>( ret )</span><br></pre></td></tr></table></figure>
+
+<p>结果: - 匹配的图像A与本身= 0.0 - 匹配图像A与图像B = 0.001946 - 匹配图像A与图像C = 0.326911</p>
+<p>看因此即使是图像旋转也不会对这个比较产生很大的影响。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%B0%8F%E4%BB%BB%E5%8A%A1/" rel="tag"># 图像处理小任务</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/03/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9A%E5%BD%A2%E6%80%81%E5%AD%A6%E8%BD%AC%E6%8D%A2%E3%80%81%E5%9B%BE%E5%83%8F%E6%A2%AF%E5%BA%A6%E3%80%81canny%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B%E3%80%81%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/" rel="prev" title="图像处理的基本操作（二）：形态学转换、图像梯度、canny边缘检测、图像金字塔">
+                  <i class="fa fa-chevron-left"></i> 图像处理的基本操作（二）：形态学转换、图像梯度、canny边缘检测、图像金字塔
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"all","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
